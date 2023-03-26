@@ -1,4 +1,5 @@
 import cv2
+import json
 import numpy as np
 import math
 import time
@@ -205,6 +206,19 @@ class Body(object):
 
         # subset: n*20 array, 0-17 is the index in candidate, 18 is the total score, 19 is the total parts
         # candidate: x, y, score, id
+        data = {
+                'version':1.3,
+                'people': [{
+                    "person_id": [-1]
+                }]
+
+        }
+        pose_keypoints = []
+        for i in range(len(candidate)):
+            pose_keypoints.extend([candidate[i][0], candidate[i][1], candidate[i][2]])
+        data['people'][0]['pose_keypoints_2d'] = pose_keypoints
+        with open('data.json', 'w') as file:
+            json.dump(data, file)
         return candidate, subset
 
 if __name__ == "__main__":
